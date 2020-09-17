@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Order, Product
 
 def index(request):
+    
     context = {
         "all_products": Product.objects.all()
     }
@@ -13,4 +14,7 @@ def checkout(request):
     total_charge = quantity_from_form * price_from_form
     print("Charging credit card...")
     Order.objects.create(quantity_ordered=quantity_from_form, total_price=total_charge)
-    return render(request, "store/checkout.html")
+    context = {
+        'order_made': Order.objects.get(total_price)
+    }
+    return render(request, "store/checkout.html", context)
